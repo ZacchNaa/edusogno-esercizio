@@ -1,6 +1,7 @@
 import "./App.css";
-import Heading from "./components/Layout/Heading";
+import Heading from "./components/Heading";
 import Layout from "./components/Layout/Layout";
+import Register from "./views/Register";
 
 function App() {
   return (
@@ -8,15 +9,7 @@ function App() {
       <Layout>
         <div className="w-full flex flex-col gap-5">
           <Heading heading="Crea il tuo account" />
-          <div className="w-1/2 mx-auto bg-white">
-            <div className="text-4xl pt-10">HELLO WORLD</div>
-            <div className="block">
-              <button className="bg-slate-100 shadow-md px-4 py-3">
-                {" "}
-                Get started
-              </button>
-            </div>
-          </div>
+          <Register />
         </div>
       </Layout>
     </div>
