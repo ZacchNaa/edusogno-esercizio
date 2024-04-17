@@ -6,7 +6,7 @@ import Login from './views/Login';
 
 function App() {
   return (
-    <div className="w-full h-screen flex flex-cols text-center">
+    <div className="w-full flex flex-cols text-center h-screen">
       <Routes>
          <Route path='/' element={<Dashboard/>} />
          <Route path='/register' element={<Register/>} />
