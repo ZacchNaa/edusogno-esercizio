@@ -18,7 +18,7 @@ const Register: FC<RegisterProps> = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -81,7 +81,7 @@ const Register: FC<RegisterProps> = () => {
           }
           handleClick={handleTogglePassword}
         />
-        <BaseButton label="REGISTRATI" />
+        <BaseButton label="REGISTRATI" loading={isSubmitting} disabled={isSubmitting} />
         <Link
           to="/login"
           className="my-4 text-metal font-400 text-sm w-full text-center"

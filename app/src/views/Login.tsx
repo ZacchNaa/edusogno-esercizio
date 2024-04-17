@@ -18,7 +18,7 @@ const Login: FC<LoginProps> = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -65,7 +65,7 @@ const Login: FC<LoginProps> = () => {
           }
           handleClick={handleTogglePassword}
         />
-        <BaseButton label="ACCEDI" />
+        <BaseButton label="ACCEDI" loading={isSubmitting} disabled={isSubmitting} />
         <Link
           to="/reset-password"
           className="my-0 text-metal font-400 text-sm w-full text-center"

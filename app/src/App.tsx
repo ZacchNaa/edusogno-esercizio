@@ -5,9 +5,9 @@ import Register from "./views/Register";
 import Login from "./views/Login";
 import ResetPassword from "./views/ResetPassword";
 import AdminDashboard from "./views/AdminDashboard";
-import AddEvent from "./views/AddEvent";
+import EventForm from "./views/EventForm";
 import EventDetails from "./views/EventDetails";
-import EditEvent from "./views/EditEvent";
+// import EditEvent from "./views/EditEvent";
 
 function App() {
   return (
@@ -18,9 +18,9 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/events/add" element={<AddEvent />} />
+        <Route path="/events/add" element={<EventForm />} />
         <Route path="/events/:id" element={<EventDetails />} />
-        <Route path="/events/:id/edit" element={<EditEvent />} />
+        <Route path="/events/:id/edit" element={<EventForm />} />
       </Routes>
     </div>
   );
