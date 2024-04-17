@@ -10,10 +10,11 @@ import BaseButton from "../components/BaseButton";
 import Layout from "../components/Layout/Layout";
 import Heading from "../components/Heading";
 
-interface LoginProps {}
+interface ResetPasswordProps {}
 
-const Login: FC<LoginProps> = () => {
+const ResetPassword: FC<ResetPasswordProps> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [email, setEmail] = useState("name@example.com")
 
   const {
     register,
@@ -35,7 +36,7 @@ const Login: FC<LoginProps> = () => {
 
   return (
     <Layout>
-      <Heading heading="Hai già un account?" />
+      <Heading heading="Change you password!" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="relative flex flex-col gap-8 w-full md:w-1/2 md:mx-auto p-10 bg-white border border-blueblack rounded-2xl"
@@ -43,6 +44,8 @@ const Login: FC<LoginProps> = () => {
         <BaseInput
           type="email"
           name="email"
+          value={email}
+          disabled
           placeholder="name@example.com"
           label="Inserisci l’email"
           register={register}
@@ -53,7 +56,7 @@ const Login: FC<LoginProps> = () => {
           name="password"
           isPasswordField={true}
           placeholder="Scrivila qui"
-          label="Inserisci la password"
+          label="New password"
           register={register}
           error={errors.password?.message}
           Icon={
@@ -65,22 +68,16 @@ const Login: FC<LoginProps> = () => {
           }
           handleClick={handleTogglePassword}
         />
-        <BaseButton label="ACCEDI" />
+        <BaseButton label="RESET PASSWORD" />
         <Link
-          to="/reset-password"
-          className="my-0 text-metal font-400 text-sm w-full text-center"
+          to="/login"
+          className="my-4 text-metal font-400 text-sm w-full text-center"
         >
-          Forgot password?
-        </Link>
-        <Link
-          to="/register"
-          className="my-2 text-metal font-400 text-sm w-full text-center"
-        >
-          Non hai ancora un profilo? <b className="!font-700">Registrati</b>
+          Hai già un account? <b className="!font-700">Accedi</b>
         </Link>
       </form>
     </Layout>
   );
 };
 
-export default Login;
+export default ResetPassword;
