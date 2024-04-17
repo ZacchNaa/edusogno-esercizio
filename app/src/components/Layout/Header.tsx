@@ -6,16 +6,22 @@ import BaseButton from "../BaseButton";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { setUserRole } = useAuth();
-  const Logout = () => { 
-    setUserRole("user")
+  const { userRole, setUserRole } = useAuth();
+
+  const login = () => { 
+    setUserRole("admin")
+    navigate("/");
+   }
+
+  const logout = () => { 
+    setUserRole("")
     navigate("/login");
    }
 
   return (
     <header className="w-full flex justify-between items-center px-10 bg-white rounded-b-xl shadow-md shadow-shadowBlue h-20 md:h-28">
       <img className="w-20" src={Logo} alt="Wave" />
-      <BaseButton handleClick={() => Logout()} label="Logout" />
+      {userRole ? <BaseButton handleClick={() => logout()} label="logout"/> : <BaseButton handleClick={() => login()} label="login"/>}
     </header>
   );
 };
