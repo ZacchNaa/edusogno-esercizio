@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import schema from "../utils/loginValidationSchema";
 import BaseInput from "../components/BaseInput";
@@ -9,11 +9,17 @@ import { FaEyeSlash } from "react-icons/fa6";
 import BaseButton from "../components/BaseButton";
 import Layout from "../components/Layout/Layout";
 import Heading from "../components/Heading";
+import { useAuth } from "../context/AuthContext";
 
 interface LoginProps {}
 
 const Login: FC<LoginProps> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const { setUserRole } = useAuth();
+
+  const navigate = useNavigate();
+  
 
   const {
     register,
@@ -25,8 +31,8 @@ const Login: FC<LoginProps> = () => {
 
   const onSubmit = (data: any) => {
     console.log("🚀 ~ onSubmit ~ data:", data);
-
-    console.log(data);
+    setUserRole("admin")
+    navigate("/");
   };
 
   const handleTogglePassword = () => {

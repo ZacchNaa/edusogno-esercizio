@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import schema from "../utils/registerValidationSchema";
 import BaseInput from "../components/BaseInput";
@@ -9,6 +9,7 @@ import { FaEyeSlash } from "react-icons/fa6";
 import BaseButton from "../components/BaseButton";
 import Heading from "../components/Heading";
 import Layout from "../components/Layout/Layout";
+import { useAuth } from "../context/AuthContext";
 
 interface RegisterProps {}
 
@@ -23,10 +24,14 @@ const Register: FC<RegisterProps> = () => {
     resolver: yupResolver(schema),
   });
 
+  const navigate = useNavigate();
+
+  const { setUserRole } = useAuth();
+
   const onSubmit = (data: any) => {
     console.log("🚀 ~ onSubmit ~ data:", data);
-
-    console.log(data);
+    setUserRole("admin")
+    navigate("/");
   };
 
   const handleTogglePassword = () => {

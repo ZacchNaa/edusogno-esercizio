@@ -54,7 +54,8 @@ const EventForm: React.FC = () => {
   return (
     <Layout>
       <Heading heading={isEditing  ? 'Edit Event' : 'Add Event'} />
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} 
+        className="relative flex flex-col gap-8 w-full md:w-1/2 mx-auto p-10 bg-white border border-blueblack rounded-2xl">
         <BaseInput
           type="text"
           name="eventName"
@@ -69,12 +70,13 @@ const EventForm: React.FC = () => {
           defaultValue={new Date()}
           render={({ field: { onChange, value } }) => (
             <DateTimePicker
+            className="border-b border-metal text-left text-sm"
               onChange={onChange}
               value={value ? new Date(value) : null}
             />
           )}
         />
-        <BaseButton label={isEditing  ? 'Update Event' : 'Add Event'} loading={isSubmitting} disabled={isSubmitting}/>
+        <BaseButton label={isEditing  ? 'Update' : 'Add'} loading={isSubmitting} disabled={isSubmitting}/>
       </form>
     </Layout>
   );
