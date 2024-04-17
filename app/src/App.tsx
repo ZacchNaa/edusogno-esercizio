@@ -1,17 +1,17 @@
+import { Route, Routes } from 'react-router-dom';
 import "./App.css";
-import Heading from "./components/Heading";
-import Layout from "./components/Layout/Layout";
-import Register from "./views/Register";
+import Dashboard from './views/Dashboard';
+import Register from './views/Register';
+import Login from './views/Login';
 
 function App() {
   return (
     <div className="w-full h-screen flex flex-cols text-center">
-      <Layout>
-        <div className="w-full flex flex-col gap-5">
-          <Heading heading="Crea il tuo account" />
-          <Register />
-        </div>
-      </Layout>
+      <Routes>
+         <Route path='/' element={<Dashboard/>} />
+         <Route path='/register' element={<Register/>} />
+         <Route path='/login' element={<Login/>} />
+       </Routes>
     </div>
   );
 }
