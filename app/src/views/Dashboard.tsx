@@ -29,7 +29,7 @@ function Dashboard() {
       const userEvents: EventData[] = response.data?.details;
       setEvents(userEvents);
     } catch (error) {
-      console.log("🚀 ~ onSubmit ~ error:", error);
+      return error
     } finally {
       setLoading(false);
     }
@@ -43,11 +43,10 @@ function Dashboard() {
         try {
           setLoading(true);
           const response = await axios.get(ApiConstants.GET_ALL_EVENTS_URL);
-          console.log("🚀 ~ response:", response);
           const userEvents: EventData[] = response.data?.details;
           setEvents(userEvents);
         } catch (error) {
-          console.log("🚀 ~ error:", error);
+          return error
         } finally {
           setLoading(false);
         }

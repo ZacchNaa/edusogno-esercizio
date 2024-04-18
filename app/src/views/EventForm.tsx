@@ -47,7 +47,7 @@ const EventForm: React.FC = () => {
         await axios.patch(`${ApiConstants.UPDATE_EVENT_URL}${id}`, updatedEvent)
         navigate("/");
       } catch (error) {
-        console.log("🚀 ~ onSubmit ~ error:", error)      
+        return error     
       }
     } else {
       const newEvent = {

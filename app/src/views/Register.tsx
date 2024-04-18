@@ -32,7 +32,7 @@ const Register: FC<RegisterProps> = () => {
       await axios.post(ApiConstants.REGISTER_USER_URL, data)
       navigate("/login");
     } catch (error) {
-      console.log("🚀 ~ onSubmit ~ error:", error)      
+      return error 
     }
   };
 

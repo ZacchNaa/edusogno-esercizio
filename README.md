@@ -56,4 +56,5 @@ As an `admin` you have create, edit, view, and delete right
 As a `user` you have only view right
 
 You can also reset you password
+Please note that email is unique
 

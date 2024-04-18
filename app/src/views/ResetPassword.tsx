@@ -35,7 +35,7 @@ const ResetPassword: FC = () => {
       axios.post(ApiConstants.RESET_USER_PASSWORD_URL, data)
       navigate("/login");
     } catch (error) {
-      console.log("🚀 ~ onSubmit ~ error:", error)      
+      return error      
     }
   };
 

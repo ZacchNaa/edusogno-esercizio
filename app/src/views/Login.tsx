@@ -35,11 +35,8 @@ const Login: FC<LoginProps> = () => {
       const response = await axios.post(ApiConstants.LOGIN_USER_URL, data)
       const user: UserData = response.data?.details
       login(user._id, user)
-      // localStorage.setItem("user", JSON.stringify(user))
-      // navigate("/");
-      console.log("🚀 ~ onSubmit ~ response:", response)
     } catch (error) {
-      console.log("🚀 ~ onSubmit ~ error:", error)      
+      return error      
     }
   };
 

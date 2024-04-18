@@ -18,7 +18,6 @@ exports.createEvent = async (req, res, next) => {
         }
         )
     } catch (err) {
-        console.log("🚀 ~ exports.createEvent= ~ err:", err)
         res.status(401).json({
             message: "Event not successful created",
             error: err.message,

@@ -19,7 +19,7 @@ const EventDetails: React.FC = () => {
       await axios.delete(`${ApiConstants.DELETE_EVENT_URL}${currentEvent?._id}`);
       navigate("/")
     } catch (error) {
-      console.log("🚀 ~ onSubmit ~ error:", error);
+      return error
     }
   };
 

@@ -10,7 +10,6 @@ interface BaseCardProps {
 }
 
 const BaseCard: React.FC<BaseCardProps> = ({ event, userRole, handleDelete }) => {
-console.log("🚀 ~ userRole:", userRole)
 
   return (
     <div className="relative flex flex-col text-left gap-4 p-5 bg-white border border-blueblack rounded-2xl">
