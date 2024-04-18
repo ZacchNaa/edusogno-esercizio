@@ -10,6 +10,9 @@ import BaseButton from "../components/BaseButton";
 import Heading from "../components/Heading";
 import Layout from "../components/Layout/Layout";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import ApiConstants from "../configurations/apiConstants";
+import { UserData } from "../types";
 
 interface RegisterProps {}
 
@@ -26,12 +29,18 @@ const Register: FC<RegisterProps> = () => {
 
   const navigate = useNavigate();
 
-  const { setUserRole } = useAuth();
+  const { setUserRole, setUserData } = useAuth();
 
-  const onSubmit = (data: any) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
-    setUserRole("admin")
-    navigate("/");
+  const onSubmit = async (data: any) => {
+    try {
+      const response = await axios.post(ApiConstants.REGISTER_USER_URL, data)
+      const user: UserData = response.data?.details
+      setUserRole(user.role)
+      setUserData(user)
+      navigate("/");
+    } catch (error) {
+      console.log("🚀 ~ onSubmit ~ error:", error)      
+    }
   };
 
   const handleTogglePassword = () => {
@@ -47,19 +56,19 @@ const Register: FC<RegisterProps> = () => {
       >
         <BaseInput
           type="text"
-          name="firstName"
+          name="first_name"
           placeholder="Mario"
           label="Inserisci il nome"
           register={register}
-          error={errors.firstName?.message}
+          error={errors.first_name?.message}
         />
         <BaseInput
           type="text"
-          name="lastName"
+          name="last_name"
           placeholder="Rossi"
           label="Inserisci il cognome"
           register={register}
-          error={errors.lastName?.message}
+          error={errors.last_name?.message}
         />
         <BaseInput
           type="email"

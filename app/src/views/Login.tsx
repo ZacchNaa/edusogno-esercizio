@@ -10,13 +10,16 @@ import BaseButton from "../components/BaseButton";
 import Layout from "../components/Layout/Layout";
 import Heading from "../components/Heading";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import ApiConstants from "../configurations/apiConstants";
+import { UserData } from "../types";
 
 interface LoginProps {}
 
 const Login: FC<LoginProps> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const { setUserRole } = useAuth();
+  const { setUserRole, setUserData } = useAuth();
 
   const navigate = useNavigate();
   
@@ -25,19 +28,28 @@ const Login: FC<LoginProps> = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    watch
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: any) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
-    setUserRole("admin")
-    navigate("/");
+  const onSubmit = async (data: any) => {
+    try {
+      const response = await axios.post(ApiConstants.LOGIN_USER_URL, data)
+      const user: UserData = response.data?.details
+      setUserRole(user.role)
+      setUserData(user)
+      navigate("/");
+    } catch (error) {
+      console.log("🚀 ~ onSubmit ~ error:", error)      
+    }
   };
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const emailValue = watch("email");
 
   return (
     <Layout>
@@ -73,7 +85,7 @@ const Login: FC<LoginProps> = () => {
         />
         <BaseButton label="ACCEDI" loading={isSubmitting} disabled={isSubmitting} />
         <Link
-          to="/reset-password"
+          to={`/reset-password?email=${encodeURIComponent(emailValue)}`}
           className="my-0 text-metal font-400 text-sm w-full text-center"
         >
           Forgot password?

@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate  } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import schema from "../utils/loginValidationSchema";
 import BaseInput from "../components/BaseInput";
@@ -9,12 +9,21 @@ import { FaEyeSlash } from "react-icons/fa6";
 import BaseButton from "../components/BaseButton";
 import Layout from "../components/Layout/Layout";
 import Heading from "../components/Heading";
+import ApiConstants from "../configurations/apiConstants";
+import axios from "axios";
+import { UserData } from "../types";
+import { useAuth } from "../context/AuthContext";
 
-interface ResetPasswordProps {}
-
-const ResetPassword: FC<ResetPasswordProps> = () => {
+const ResetPassword: FC = () => {
+  
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const email = queryParams.get("email")!;
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [email, setEmail] = useState("name@example.com")
+ 
+  const { setUserRole, setUserData } = useAuth();
+  const navigate = useNavigate();
+  
 
   const {
     register,
@@ -24,10 +33,16 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: any) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
-
-    console.log(data);
+  const onSubmit = async (data: any) => {
+    try {
+      const response = await axios.post(ApiConstants.RESET_USER_PASSWORD_URL, data)
+      const user: UserData = response.data?.details
+      setUserRole(user.role)
+      setUserData(user)
+      navigate("/login");
+    } catch (error) {
+      console.log("🚀 ~ onSubmit ~ error:", error)      
+    }
   };
 
   const handleTogglePassword = () => {
@@ -45,7 +60,7 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
           type="email"
           name="email"
           value={email}
-          disabled
+          readOnly
           placeholder="name@example.com"
           label="Inserisci l’email"
           register={register}
