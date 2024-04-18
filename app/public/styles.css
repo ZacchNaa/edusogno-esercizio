@@ -1,0 +1,6 @@
+@font-face {
+    font-family: 'DM Sans';
+    src: url('./fonts/DMSans-Bold-BF64376d32191f2.ttf') format('truetype'),
+         url('./fonts/DMSans-Medium-BF64376d329a539.ttf') format('truetype'),
+         url('./fonts/DMSans-Regular-BF64376d323f095.ttf') format('truetype');
+  }
