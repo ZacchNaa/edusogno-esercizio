@@ -13,11 +13,14 @@ exports.register = async (req, res, next) => {
             email,
             role,
             password: hash,
-        }).then((user) =>
-            res.status(200).json({
+        }).then(user =>
+            {
+                const {first_name, last_name, email, role, _id} = user
+                return res.status(200).json({
                 message: "User successfully created",
-                user,
+                details: {first_name, last_name, email, role, _id},
             })
+        }
         )
             .catch((error) =>
                 res.status(400).json({
@@ -39,15 +42,16 @@ exports.login = async (req, res, next) => {
         const user = await User.findOne({ email })
         if (!user) {
             res.status(401).json({
-                message: "Login not successful",
+                message: "User not found",
                 error: "User not found",
             })
         } else {
+            const {first_name, last_name, email, role, _id} = user
             bcrypt.compare(password, user.password).then(function (result) {
                 result
                     ? res.status(200).json({
                         message: "Login successful",
-                        user,
+                        details: {first_name, last_name, email, role, _id},
                     })
                     : res.status(400).json({ message: "Login not successful" })
             })
@@ -75,14 +79,17 @@ exports.resetPassword = async (req, res, next) => {
                 message: "User not found",
             });
         }
+        const {first_name, last_name, role, _id} = user
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         user.password = hashedPassword;
         await user.save();
 
+
         return res.status(200).json({
             message: "Password reset successful",
+            details: {first_name, last_name, role, _id}
         });
     } catch (error) {
         return res.status(500).json({

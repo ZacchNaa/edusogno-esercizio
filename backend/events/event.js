@@ -8,11 +8,13 @@ exports.createEvent = async (req, res, next) => {
             attendees,
             event_name,
             event_date,
-        }).then(event =>
-            res.status(200).json({
+        }).then(event => {
+            const { attendees, event_name, event_date, _id } = event
+            return res.status(200).json({
                 message: "Event successfully created",
-                event,
+                details: { attendees, event_name, event_date, _id },
             })
+        }
         )
     } catch (err) {
         res.status(401).json({
