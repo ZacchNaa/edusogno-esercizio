@@ -1,7 +1,8 @@
 const Event = require("../models/events")
 
 exports.createEvent = async (req, res, next) => {
-    const { attendees, event_name, event_date } = req.body
+    let { attendees, event_name, event_date } = req.body
+        attendees = attendees?.split(",")
 
     try {
         await Event.create({
@@ -29,7 +30,7 @@ exports.getEvents = async (req, res, next) => {
         const events = await Event.find();
         res.status(200).json({
             message: "Events successfully fetched",
-            events,
+            details:events,
         });
     } catch (err) {
         res.status(401).json({
@@ -64,7 +65,8 @@ exports.getEvent = async (req, res, next) => {
 
 
 exports.updateEvent = async (req, res, next) => {
-    const { id, data } = req.body
+    let { id, data } = req.body
+    data.attendees = data.attendees?.split(",")
 
 
     try {
