@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,14 +11,11 @@ import Heading from "../components/Heading";
 import Layout from "../components/Layout/Layout";
 import axios from "axios";
 import ApiConstants from "../configurations/apiConstants";
-import { useAuth } from "../context/AuthContext";
 
 interface RegisterProps {}
 
 const Register: FC<RegisterProps> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
-  const { userData } = useAuth();
 
   const {
     register,
@@ -42,12 +39,6 @@ const Register: FC<RegisterProps> = () => {
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
-
-  useEffect(() => {
-    if (userData) {
-      navigate("/");
-    }
-  }, [userData, navigate]);
 
   return (
     <Layout>

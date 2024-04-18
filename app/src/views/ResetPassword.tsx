@@ -11,8 +11,6 @@ import Layout from "../components/Layout/Layout";
 import Heading from "../components/Heading";
 import ApiConstants from "../configurations/apiConstants";
 import axios from "axios";
-import { UserData } from "../types";
-import { useAuth } from "../context/AuthContext";
 
 const ResetPassword: FC = () => {
   
@@ -21,7 +19,6 @@ const ResetPassword: FC = () => {
   const email = queryParams.get("email")!;
   const [showPassword, setShowPassword] = useState<boolean>(false);
  
-  const { setUserData } = useAuth();
   const navigate = useNavigate();
   
 
@@ -35,9 +32,7 @@ const ResetPassword: FC = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      const response = await axios.post(ApiConstants.RESET_USER_PASSWORD_URL, data)
-      const user: UserData = response.data?.details
-      setUserData(user)
+      axios.post(ApiConstants.RESET_USER_PASSWORD_URL, data)
       navigate("/login");
     } catch (error) {
       console.log("🚀 ~ onSubmit ~ error:", error)      

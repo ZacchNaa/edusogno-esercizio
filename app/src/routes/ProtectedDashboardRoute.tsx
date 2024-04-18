@@ -3,9 +3,9 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const ProtectedDashboardRoute: React.FC = () => {
-  const { userData } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-  if (userData){
+  if (isAuthenticated){
     return <Outlet/>
   }
   return <Navigate to="/login" />

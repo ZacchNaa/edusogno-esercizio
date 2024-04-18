@@ -13,7 +13,7 @@ const EventSchema = new mongoose.Schema({
   },
   event_date: {
     type: Date,
-    unique: true,
+    unique: false,
     required: true,
   },
 })

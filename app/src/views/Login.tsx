@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import schema from "../utils/loginValidationSchema";
 import BaseInput from "../components/BaseInput";
@@ -19,10 +19,7 @@ interface LoginProps {}
 const Login: FC<LoginProps> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const { userData } = useAuth();
-
-  const navigate = useNavigate();
-  
+  const { isAuthenticated, login } = useAuth();
 
   const {
     register,
@@ -37,8 +34,10 @@ const Login: FC<LoginProps> = () => {
     try {
       const response = await axios.post(ApiConstants.LOGIN_USER_URL, data)
       const user: UserData = response.data?.details
-      localStorage.setItem("user", JSON.stringify(user))
-      navigate("/");
+      login(user._id, user)
+      // localStorage.setItem("user", JSON.stringify(user))
+      // navigate("/");
+      console.log("🚀 ~ onSubmit ~ response:", response)
     } catch (error) {
       console.log("🚀 ~ onSubmit ~ error:", error)      
     }
@@ -50,11 +49,10 @@ const Login: FC<LoginProps> = () => {
 
   const emailValue = watch("email");
 
-  useEffect(() => {
-    if (userData) {
-      navigate("/");
-    }
-  }, [userData, navigate]);
+  if (isAuthenticated){
+    return <Navigate to="/" />
+  }
+  
 
   return (
     <Layout>

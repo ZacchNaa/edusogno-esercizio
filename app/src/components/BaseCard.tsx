@@ -10,6 +10,7 @@ interface BaseCardProps {
 }
 
 const BaseCard: React.FC<BaseCardProps> = ({ event, userRole, handleDelete }) => {
+console.log("🚀 ~ userRole:", userRole)
 
   return (
     <div className="relative flex flex-col text-left gap-4 p-5 bg-white border border-blueblack rounded-2xl">
@@ -45,6 +46,7 @@ const BaseCard: React.FC<BaseCardProps> = ({ event, userRole, handleDelete }) =>
       {userRole !== "admin" && (
         <Link
           to={`/events/${event._id}/view`}
+          state={event}
           className="border-r border-muted text-blue px-3"
         >
           View

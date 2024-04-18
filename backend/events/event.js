@@ -18,6 +18,7 @@ exports.createEvent = async (req, res, next) => {
         }
         )
     } catch (err) {
+        console.log("🚀 ~ exports.createEvent= ~ err:", err)
         res.status(401).json({
             message: "Event not successful created",
             error: err.message,
@@ -67,7 +68,7 @@ exports.getEvent = async (req, res, next) => {
 exports.updateEvent = async (req, res, next) => {
     let data = req.body
     const { id } = req.params
-    data.attendees = data.attendees?.split(",")
+    data.attendees = typeof data.attendees ==="string"? data.attendees?.split(",") : data.attendees
 
 
     try {

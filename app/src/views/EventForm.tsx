@@ -10,7 +10,6 @@ import "react-calendar/dist/Calendar.css";
 import { yupResolver } from "@hookform/resolvers/yup";
 import eventSchema from "../utils/enventValidationSchemas";
 import BaseButton from "../components/BaseButton";
-import { useAuth } from "../context/AuthContext";
 import { EventData } from "../types";
 import axios from "axios";
 import ApiConstants from "../configurations/apiConstants";
@@ -27,8 +26,6 @@ const EventForm: React.FC = () => {
   const currentEvent: EventData = location.state
   const { id } = useParams();
   const isEditing = !!id;
-
-  const { setUserData } = useAuth();
 
   const {
     control,
@@ -63,10 +60,10 @@ const EventForm: React.FC = () => {
   };
 
   useEffect(() => {
-    setValue("event_name", currentEvent?.event_name);
+    if(isEditing){setValue("event_name", currentEvent?.event_name);
     setValue("event_date", new Date(currentEvent?.event_date));
-    setValue("attendees", currentEvent?.attendees);
-  }, [setValue, currentEvent]);
+    setValue("attendees", currentEvent?.attendees);}
+  }, [setValue, currentEvent, isEditing]);
 
   return (
     <Layout>

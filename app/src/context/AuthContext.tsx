@@ -1,8 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { UserData } from "../types";
 interface AuthContextType {
   userData: UserData | null;
+  isAuthenticated: boolean;
   setUserData: (data: UserData | null) => void;
+  login: (userId: string, data: UserData) => void;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,22 +23,27 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [userData, setUserData] = useState<UserData | null>(null);
-
-  const initializeUserDataFromLocalStorage = () => {
+  const [userData, setUserData] = useState<UserData | null>(() => {
     const userDataFromLocalStorage = localStorage.getItem("user");
-    if (userDataFromLocalStorage) {
-      setUserData(JSON.parse(userDataFromLocalStorage));
-    }
-  };
+    return userDataFromLocalStorage ? JSON.parse(userDataFromLocalStorage) : null;
+  })
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem("userId"));
 
-  useEffect(() => {
-    initializeUserDataFromLocalStorage();
-  }, []);
+  const login = (userId: string, data: UserData) => { 
+    localStorage.setItem("user", JSON.stringify(data))
+    localStorage.setItem("userId", userId)
+    setIsAuthenticated(true)
+    setUserData(data)
+   }
+  const logout = () => { 
+    localStorage.clear()
+    setIsAuthenticated(false)
+   }
 
   return (
-    <AuthContext.Provider value={{ userData, setUserData }}>
+    <AuthContext.Provider value={{ isAuthenticated, userData, login, logout, setUserData }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
