@@ -1,12 +1,8 @@
-import React, { createContext, useContext, useState } from "react";
-import { EventData, UserData } from "../types";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { UserData } from "../types";
 interface AuthContextType {
-  userRole: string;
   userData: UserData | null;
-  userEvents: EventData | null;
-  setUserRole: (role: string) => void;
   setUserData: (data: UserData | null) => void;
-  setUserEvents: (data: EventData | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,12 +20,21 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [userRole, setUserRole] = useState<string>('');
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [userEvents, setUserEvents] = useState<EventData | null>(null);
+
+  const initializeUserDataFromLocalStorage = () => {
+    const userDataFromLocalStorage = localStorage.getItem("user");
+    if (userDataFromLocalStorage) {
+      setUserData(JSON.parse(userDataFromLocalStorage));
+    }
+  };
+
+  useEffect(() => {
+    initializeUserDataFromLocalStorage();
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ userRole, userData, userEvents, setUserRole, setUserData, setUserEvents }}>
+    <AuthContext.Provider value={{ userData, setUserData }}>
       {children}
     </AuthContext.Provider>
   );

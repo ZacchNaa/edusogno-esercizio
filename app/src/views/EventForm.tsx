@@ -1,9 +1,7 @@
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import events from "../assets/data"; // Assuming events array is imported here
+import React, { useEffect } from "react";
+import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
 import Heading from "../components/Heading";
-import { slugify } from "../utils/utils";
 import BaseInput from "../components/BaseInput";
 import { Controller, useForm } from "react-hook-form";
 import DateTimePicker from "react-datetime-picker";
@@ -12,6 +10,10 @@ import "react-calendar/dist/Calendar.css";
 import { yupResolver } from "@hookform/resolvers/yup";
 import eventSchema from "../utils/enventValidationSchemas";
 import BaseButton from "../components/BaseButton";
+import { useAuth } from "../context/AuthContext";
+import { EventData } from "../types";
+import axios from "axios";
+import ApiConstants from "../configurations/apiConstants";
 
 interface FormData {
   attendees?: string[];
@@ -21,36 +23,72 @@ interface FormData {
 
 const EventForm: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentEvent: EventData = location.state?.event
   const { id } = useParams();
   const isEditing = !!id;
+
+  const { setUserData } = useAuth();
 
   const {
     control,
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: yupResolver(eventSchema),
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     if (isEditing) {
       const updatedEvent = {
-        event_name: data.event_name,
+        ...data,
         event_date: data.event_date.toISOString(),
-        slug: slugify(data.event_name),
       };
+      try {
+        const response = await axios.post(ApiConstants.UPDATE_EVENT_URL, updatedEvent)
+        console.log("🚀 ~ onSubmit ~ response:", response)
+        const events: EventData[] = response.data?.details
+        // setUserData(user)
+        // navigate("/");
+      } catch (error) {
+        console.log("🚀 ~ onSubmit ~ error:", error)      
+      }
       // events[parseInt(id!, 10)] = updatedEvent;
     } else {
       const newEvent = {
-        event_name: data.event_name,
+        ...data,
         event_date: data.event_date.toISOString(), 
-        slug: slugify(data.event_name),
       };
-      // events.push(newEvent);
+      const response = await axios.post(ApiConstants.CREATE_EVENT_URL, newEvent)
+      console.log("🚀 ~ onSubmit ~ response:", response)
+      const event: EventData[] = response.data?.details
+      // setUserData(user)
+      // navigate("/");
     }
-    navigate("/");
+    // navigate("/");
   };
+
+  useEffect(() => {
+    // Fetch event data and populate the form if editing
+    setValue("event_name", currentEvent?.event_name);
+    setValue("event_date", new Date(currentEvent?.event_date));
+    setValue("attendees", currentEvent?.attendees);
+    // const fetchEventData = async () => {
+    //   try {
+    //     // const response = await axios.get(`${ApiConstants.GET_EVENT_URL}/${id}`);
+    //     // const eventData: EventData = response.data;
+    //     // // Set values for the form inputs
+    //   } catch (error) {
+    //     console.error("Error fetching event data:", error);
+    //   }
+    // };
+
+    // if (isEditing) {
+    //   fetchEventData();
+    // }
+  }, [setValue, currentEvent]);
 
   return (
     <Layout>
@@ -65,15 +103,18 @@ const EventForm: React.FC = () => {
           register={register}
           error={errors.event_name?.message}
         />
-        <div className="flex">
-          <label htmlFor="attendees" className=""></label>
+        <div className="relative">
           <textarea 
           {...register("attendees")} 
           name="attendees" 
           id="attendees" 
           cols={30} 
-          rows={10} 
+          rows={3} 
           className={`h-full w-full disabled:text-muted border-b border-metal placeholder:text-muted pt-4 pb-1.5 text-sm font-normal focus:outline-none disabled:bg-blue-gray-50`}></textarea>
+          
+      <label htmlFor="attendees" className="after:content[' '] pointer-events-none absolute left-0 -top-2.5 flex h-full w-full select-none !overflow-visible truncate text-sm font-bold leading-tight !text-dark transition-all after:absolute after:-bottom-2.5 after:block after:w-full after:scale-x-0 after:border-b-2 after:border-gray-500 after:transition-transform after:duration-300 peer-placeholder-shown:leading-tight peer-placeholder-shown:text-blue-gray-500 peer-focus:text-sm peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:after:scale-x-100 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+        Event Attendees
+      </label>
         </div>
         <Controller
           control={control}
@@ -88,6 +129,7 @@ const EventForm: React.FC = () => {
           )}
         />
         <BaseButton label={isEditing  ? 'Update' : 'Add'} loading={isSubmitting} disabled={isSubmitting}/>
+        <Link to="/" className="border-r border-muted text-blue text-left px-3">View Events</Link>
       </form>
     </Layout>
   );

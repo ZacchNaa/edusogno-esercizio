@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ProtectedDashboardRoute />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="events/details" element={<EventDetails />} />
+          <Route path="events/:id/view" element={<EventDetails />} />
         </Route>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
@@ -24,9 +24,6 @@ function App() {
           <Route path="add" element={<EventForm />} />
           <Route path=":id/edit" element={<EventForm />} />
         </Route>
-        {/* <Route path="/events/" element={<ProtectedDashboardRoute />}>
-          <Route path="details" element={<EventDetails />} />
-        </Route> */}
       </Routes>
     </div>
   );

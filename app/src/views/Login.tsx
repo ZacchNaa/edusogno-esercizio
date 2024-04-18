@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,7 +19,7 @@ interface LoginProps {}
 const Login: FC<LoginProps> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const { setUserRole, setUserData } = useAuth();
+  const { userData } = useAuth();
 
   const navigate = useNavigate();
   
@@ -37,8 +37,7 @@ const Login: FC<LoginProps> = () => {
     try {
       const response = await axios.post(ApiConstants.LOGIN_USER_URL, data)
       const user: UserData = response.data?.details
-      setUserRole(user.role)
-      setUserData(user)
+      localStorage.setItem("user", JSON.stringify(user))
       navigate("/");
     } catch (error) {
       console.log("🚀 ~ onSubmit ~ error:", error)      
@@ -50,6 +49,12 @@ const Login: FC<LoginProps> = () => {
   };
 
   const emailValue = watch("email");
+
+  useEffect(() => {
+    if (userData) {
+      navigate("/");
+    }
+  }, [userData, navigate]);
 
   return (
     <Layout>

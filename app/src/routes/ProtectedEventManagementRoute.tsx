@@ -3,9 +3,9 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const ProtectedEventManagementRoute: React.FC = () => {
-  const { userRole } = useAuth();
+  const { userData } = useAuth();
 
-  if (userRole === "admin"){
+  if (userData?.role === "admin"){
     return <Outlet/>
   }
   return <Navigate to="/" />

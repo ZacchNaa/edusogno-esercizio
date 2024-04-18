@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,15 +9,16 @@ import { FaEyeSlash } from "react-icons/fa6";
 import BaseButton from "../components/BaseButton";
 import Heading from "../components/Heading";
 import Layout from "../components/Layout/Layout";
-import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import ApiConstants from "../configurations/apiConstants";
-import { UserData } from "../types";
+import { useAuth } from "../context/AuthContext";
 
 interface RegisterProps {}
 
 const Register: FC<RegisterProps> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const { userData } = useAuth();
 
   const {
     register,
@@ -29,15 +30,10 @@ const Register: FC<RegisterProps> = () => {
 
   const navigate = useNavigate();
 
-  const { setUserRole, setUserData } = useAuth();
-
   const onSubmit = async (data: any) => {
     try {
-      const response = await axios.post(ApiConstants.REGISTER_USER_URL, data)
-      const user: UserData = response.data?.details
-      setUserRole(user.role)
-      setUserData(user)
-      navigate("/");
+      await axios.post(ApiConstants.REGISTER_USER_URL, data)
+      navigate("/login");
     } catch (error) {
       console.log("🚀 ~ onSubmit ~ error:", error)      
     }
@@ -46,6 +42,12 @@ const Register: FC<RegisterProps> = () => {
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
+
+  useEffect(() => {
+    if (userData) {
+      navigate("/");
+    }
+  }, [userData, navigate]);
 
   return (
     <Layout>

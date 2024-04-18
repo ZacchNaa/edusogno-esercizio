@@ -21,7 +21,7 @@ const ResetPassword: FC = () => {
   const email = queryParams.get("email")!;
   const [showPassword, setShowPassword] = useState<boolean>(false);
  
-  const { setUserRole, setUserData } = useAuth();
+  const { setUserData } = useAuth();
   const navigate = useNavigate();
   
 
@@ -37,7 +37,6 @@ const ResetPassword: FC = () => {
     try {
       const response = await axios.post(ApiConstants.RESET_USER_PASSWORD_URL, data)
       const user: UserData = response.data?.details
-      setUserRole(user.role)
       setUserData(user)
       navigate("/login");
     } catch (error) {
