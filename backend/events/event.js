@@ -65,7 +65,8 @@ exports.getEvent = async (req, res, next) => {
 
 
 exports.updateEvent = async (req, res, next) => {
-    let { id, data } = req.body
+    let data = req.body
+    const { id } = req.params
     data.attendees = data.attendees?.split(",")
 
 
