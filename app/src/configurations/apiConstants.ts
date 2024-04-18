@@ -12,7 +12,7 @@ class ApiConstants {
     static GET_ALL_EVENTS_URL = `${this.EVENTS_BASE_URL}/all-events`
     static GET_EVENT_ID_URL = `${this.EVENTS_BASE_URL}/events/` //events/:id
     static CREATE_EVENT_URL = `${this.EVENTS_BASE_URL}/create-event`
-    static UPDATE_EVENT_URL = `${this.EVENTS_BASE_URL}/update-event`
+    static UPDATE_EVENT_URL = `${this.EVENTS_BASE_URL}/update-event/`
     static DELETE_EVENT_URL = `${this.EVENTS_BASE_URL}/delete-event/` //delete-event/:id
 
 }

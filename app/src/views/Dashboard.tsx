@@ -21,6 +21,20 @@ function Dashboard() {
     navigate("/events/add");
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete(`${ApiConstants.DELETE_EVENT_URL}${id}`);
+      setLoading(true);
+      const response = await axios.get(ApiConstants.GET_ALL_EVENTS_URL);
+      const userEvents: EventData[] = response.data?.details;
+      setEvents(userEvents);
+    } catch (error) {
+      console.log("🚀 ~ onSubmit ~ error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     let isCancelled: boolean = false;
 
@@ -56,13 +70,14 @@ function Dashboard() {
             <BaseButton label="Add Event" handleClick={handleAddEvent} />
           </div>
         )}
-        <div className="w-full flex flex-col justify-center">
+        <div className="w-full flex flex-col items-center justify-center">
           {!loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:gap-5 2xl:gap-16">
               {events.map((event: EventData) => (
                 <BaseCard
                   key={event._id}
                   event={event}
+                  handleDelete={handleDelete}
                   userRole={userData?.role}
                 />
               ))}

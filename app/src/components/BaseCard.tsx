@@ -6,16 +6,10 @@ import { EventData } from "../types";
 interface BaseCardProps {
   event: EventData;
   userRole?: string;
+  handleDelete: (id:string)=> void;
 }
 
-const BaseCard: React.FC<BaseCardProps> = ({ event, userRole }) => {
-  const handleEdit = () => {
-    // Handle edit logic
-  };
-
-  const handleDelete = (id: string) => {
-    // Handle delete logic
-  };
+const BaseCard: React.FC<BaseCardProps> = ({ event, userRole, handleDelete }) => {
 
   return (
     <div className="relative flex flex-col text-left gap-4 p-5 bg-white border border-blueblack rounded-2xl">

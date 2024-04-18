@@ -24,7 +24,7 @@ interface FormData {
 const EventForm: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const currentEvent: EventData = location.state?.event
+  const currentEvent: EventData = location.state
   const { id } = useParams();
   const isEditing = !!id;
 
@@ -47,47 +47,25 @@ const EventForm: React.FC = () => {
         event_date: data.event_date.toISOString(),
       };
       try {
-        const response = await axios.post(ApiConstants.UPDATE_EVENT_URL, updatedEvent)
-        console.log("🚀 ~ onSubmit ~ response:", response)
-        const events: EventData[] = response.data?.details
-        // setUserData(user)
-        // navigate("/");
+        await axios.patch(`${ApiConstants.UPDATE_EVENT_URL}${id}`, updatedEvent)
+        navigate("/");
       } catch (error) {
         console.log("🚀 ~ onSubmit ~ error:", error)      
       }
-      // events[parseInt(id!, 10)] = updatedEvent;
     } else {
       const newEvent = {
         ...data,
         event_date: data.event_date.toISOString(), 
       };
-      const response = await axios.post(ApiConstants.CREATE_EVENT_URL, newEvent)
-      console.log("🚀 ~ onSubmit ~ response:", response)
-      const event: EventData[] = response.data?.details
-      // setUserData(user)
-      // navigate("/");
+      await axios.post(ApiConstants.CREATE_EVENT_URL, newEvent)
+      navigate("/");
     }
-    // navigate("/");
   };
 
   useEffect(() => {
-    // Fetch event data and populate the form if editing
     setValue("event_name", currentEvent?.event_name);
     setValue("event_date", new Date(currentEvent?.event_date));
     setValue("attendees", currentEvent?.attendees);
-    // const fetchEventData = async () => {
-    //   try {
-    //     // const response = await axios.get(`${ApiConstants.GET_EVENT_URL}/${id}`);
-    //     // const eventData: EventData = response.data;
-    //     // // Set values for the form inputs
-    //   } catch (error) {
-    //     console.error("Error fetching event data:", error);
-    //   }
-    // };
-
-    // if (isEditing) {
-    //   fetchEventData();
-    // }
   }, [setValue, currentEvent]);
 
   return (
