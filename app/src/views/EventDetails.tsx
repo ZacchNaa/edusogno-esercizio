@@ -6,6 +6,7 @@ import { EventData } from "../types";
 import axios from "axios";
 import ApiConstants from "../configurations/apiConstants";
 import { useAuth } from "../context/AuthContext";
+import { formatDateTime } from "../utils/utils";
 
 const EventDetails: React.FC = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const EventDetails: React.FC = () => {
       <Heading heading="Event Details" />
       <div className="relative text-left flex flex-col gap-8 w-full md:w-1/2 md:mx-auto p-10 bg-white border border-blueblack rounded-2xl">
         <p><span className="text-muted">Name:</span> {currentEvent?.event_name} </p>
-        <p><span className="text-muted">Date:</span> {currentEvent?.event_date} </p>
+        <p><span className="text-muted">Date:</span> {formatDateTime(currentEvent?.event_date)} </p>
         <div>
           <p><span className="text-muted">Attendees:</span></p>
           <div className="w-full flex my-2 flex-wrap gap-2 justify-start">

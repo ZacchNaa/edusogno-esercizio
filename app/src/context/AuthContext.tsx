@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       ? JSON.parse(userDataFromLocalStorage)
       : null;
   });
-  const [message, setMessage] = useState<Message | null>({text:"successful", type:"error"});
+  const [message, setMessage] = useState<Message | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     !!localStorage.getItem("userId")
   );
