@@ -11,6 +11,7 @@ import Layout from "../components/Layout/Layout";
 import Heading from "../components/Heading";
 import ApiConstants from "../configurations/apiConstants";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 const ResetPassword: FC = () => {
   
@@ -20,7 +21,7 @@ const ResetPassword: FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
  
   const navigate = useNavigate();
-  
+  const { setMessage } = useAuth();
 
   const {
     register,
@@ -35,7 +36,7 @@ const ResetPassword: FC = () => {
       axios.post(ApiConstants.RESET_USER_PASSWORD_URL, data)
       navigate("/login");
     } catch (error) {
-      return error      
+      setMessage({text: "We could not your password, please try again", type:"error"}) 
     }
   };
 

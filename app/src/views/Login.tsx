@@ -19,7 +19,7 @@ interface LoginProps {}
 const Login: FC<LoginProps> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const { isAuthenticated, login } = useAuth();
+  const { isAuthenticated, login, setMessage } = useAuth();
 
   const {
     register,
@@ -36,6 +36,7 @@ const Login: FC<LoginProps> = () => {
       const user: UserData = response.data?.details
       login(user._id, user)
     } catch (error) {
+      setMessage({text: "Login failed, please check you details and try again", type:"error"})
       return error      
     }
   };

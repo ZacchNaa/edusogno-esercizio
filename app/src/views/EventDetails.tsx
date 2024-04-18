@@ -12,14 +12,14 @@ const EventDetails: React.FC = () => {
   const location = useLocation();
   const currentEvent: EventData = location.state;
 
-  const {userData} = useAuth()
+  const {userData, setMessage} = useAuth()
 
   const handleDeleteEvent = async () => {
     try {
       await axios.delete(`${ApiConstants.DELETE_EVENT_URL}${currentEvent?._id}`);
       navigate("/")
     } catch (error) {
-      return error
+      setMessage({text: "We could not delete the event, please try again", type:"error"})
     }
   };
 

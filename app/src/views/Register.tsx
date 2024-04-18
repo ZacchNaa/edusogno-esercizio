@@ -11,6 +11,7 @@ import Heading from "../components/Heading";
 import Layout from "../components/Layout/Layout";
 import axios from "axios";
 import ApiConstants from "../configurations/apiConstants";
+import { useAuth } from "../context/AuthContext";
 
 interface RegisterProps {}
 
@@ -26,12 +27,14 @@ const Register: FC<RegisterProps> = () => {
   });
 
   const navigate = useNavigate();
+  const { setMessage } = useAuth();
 
   const onSubmit = async (data: any) => {
     try {
       await axios.post(ApiConstants.REGISTER_USER_URL, data)
       navigate("/login");
     } catch (error) {
+      setMessage({text: "Registration failed, please try again", type:"error"})
       return error 
     }
   };

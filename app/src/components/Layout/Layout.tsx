@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
 import Rocket from "../../assets/rocket.svg";
 import Header from "./Header";
+import BaseAlertMessage from "../BaseAlertMessage";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,6 +11,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <div className="relative w-full bg-lightblue md:bg-hero-wave bg-cover h-screen lg:h-[160vh]">
       <Header />
+      <BaseAlertMessage />
       <img
         className="absolute w-0 md:w-24 2xl:w-36 bottom-0 md:bottom-[8.2%] xl:bottom-[6.8%] 2xl:bottom-20 right-10 lg:right-40  "
         src={Rocket}

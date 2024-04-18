@@ -12,7 +12,7 @@ import BaseLoader from "../components/BaseLoader";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const { userData } = useAuth();
+  const { userData, setMessage } = useAuth();
 
   const [events, setEvents] = useState<EventData[] | []>([]);
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ function Dashboard() {
       const userEvents: EventData[] = response.data?.details;
       setEvents(userEvents);
     } catch (error) {
-      return error
+      setMessage({text: "We could not delete the event, please try again", type:"error"})
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,7 @@ function Dashboard() {
           const userEvents: EventData[] = response.data?.details;
           setEvents(userEvents);
         } catch (error) {
-          return error
+          setMessage({text: "We could not get the events, please try again", type:"error"})
         } finally {
           setLoading(false);
         }

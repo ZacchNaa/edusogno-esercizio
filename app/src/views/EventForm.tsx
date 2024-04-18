@@ -13,6 +13,7 @@ import BaseButton from "../components/BaseButton";
 import { EventData } from "../types";
 import axios from "axios";
 import ApiConstants from "../configurations/apiConstants";
+import { useAuth } from "../context/AuthContext";
 
 interface FormData {
   attendees?: string[];
@@ -26,6 +27,7 @@ const EventForm: React.FC = () => {
   const currentEvent: EventData = location.state
   const { id } = useParams();
   const isEditing = !!id;
+  const { setMessage } = useAuth();
 
   const {
     control,
@@ -47,7 +49,7 @@ const EventForm: React.FC = () => {
         await axios.patch(`${ApiConstants.UPDATE_EVENT_URL}${id}`, updatedEvent)
         navigate("/");
       } catch (error) {
-        return error     
+        setMessage({text: "We could not update the event, please try again", type:"error"})
       }
     } else {
       const newEvent = {
