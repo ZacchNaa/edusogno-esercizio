@@ -14,7 +14,7 @@ const BaseButton: FC<BaseButtonProps> = ({ label, disabled, loading, handleClick
       type="submit"
       disabled={disabled}
       onClick={handleClick}
-      className="bg-blue flex justify-center items-center gap-3 text-white uppercase rounded-xl px-4 py-3"
+      className="bg-blue flex justify-center disabled:cursor-wait items-center gap-3 text-white uppercase rounded-xl px-4 py-3"
     >
       {loading && <BaseLoader />}
       {label}

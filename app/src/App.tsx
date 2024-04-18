@@ -13,7 +13,10 @@ function App() {
   return (
     <div className="w-full flex flex-cols text-center h-screen">
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<ProtectedDashboardRoute />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="events/details" element={<EventDetails />} />
+        </Route>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ResetPassword />} />
@@ -21,9 +24,9 @@ function App() {
           <Route path="add" element={<EventForm />} />
           <Route path=":id/edit" element={<EventForm />} />
         </Route>
-        <Route path="/events/" element={<ProtectedDashboardRoute />}>
+        {/* <Route path="/events/" element={<ProtectedDashboardRoute />}>
           <Route path="details" element={<EventDetails />} />
-        </Route>
+        </Route> */}
       </Routes>
     </div>
   );
