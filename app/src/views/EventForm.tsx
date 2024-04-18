@@ -14,8 +14,9 @@ import eventSchema from "../utils/enventValidationSchemas";
 import BaseButton from "../components/BaseButton";
 
 interface FormData {
-  eventName: string;
-  eventDate: Date;
+  attendees?: string[];
+  event_name: string;
+  event_date: Date;
 }
 
 const EventForm: React.FC = () => {
@@ -35,18 +36,18 @@ const EventForm: React.FC = () => {
   const onSubmit = (data: FormData) => {
     if (isEditing) {
       const updatedEvent = {
-        eventName: data.eventName,
-        eventDate: data.eventDate.toISOString(),
-        slug: slugify(data.eventName),
+        event_name: data.event_name,
+        event_date: data.event_date.toISOString(),
+        slug: slugify(data.event_name),
       };
-      events[parseInt(id!, 10)] = updatedEvent;
+      // events[parseInt(id!, 10)] = updatedEvent;
     } else {
       const newEvent = {
-        eventName: data.eventName,
-        eventDate: data.eventDate.toISOString(), 
-        slug: slugify(data.eventName),
+        event_name: data.event_name,
+        event_date: data.event_date.toISOString(), 
+        slug: slugify(data.event_name),
       };
-      events.push(newEvent);
+      // events.push(newEvent);
     }
     navigate("/");
   };
@@ -58,15 +59,25 @@ const EventForm: React.FC = () => {
         className="relative flex flex-col gap-8 w-full md:w-1/2 mx-auto p-10 bg-white border border-blueblack rounded-2xl">
         <BaseInput
           type="text"
-          name="eventName"
+          name="event_name"
           placeholder="Event Name"
           label="Event Name"
           register={register}
-          error={errors.eventName?.message}
+          error={errors.event_name?.message}
         />
+        <div className="flex">
+          <label htmlFor="attendees" className=""></label>
+          <textarea 
+          {...register("attendees")} 
+          name="attendees" 
+          id="attendees" 
+          cols={30} 
+          rows={10} 
+          className={`h-full w-full disabled:text-muted border-b border-metal placeholder:text-muted pt-4 pb-1.5 text-sm font-normal focus:outline-none disabled:bg-blue-gray-50`}></textarea>
+        </div>
         <Controller
           control={control}
-          name="eventDate"
+          name="event_date"
           defaultValue={new Date()}
           render={({ field: { onChange, value } }) => (
             <DateTimePicker

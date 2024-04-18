@@ -14,7 +14,7 @@ interface Event {
 
 function Dashboard() {
   const navigate = useNavigate();
-  const { userRole } = useAuth();
+  const { userRole, userData  } = useAuth();
 
   const handleAddEvent = () => {
     navigate("/events/add");
@@ -22,7 +22,7 @@ function Dashboard() {
 
   return (
     <Layout>
-      <Heading heading={`Ciao ${userRole === 'admin' ? 'ADMIN' : 'USER'} ecco i tuoi eventi`} />
+      <Heading heading={`Ciao ${userData?.first_name} ${userData?.last_name} ecco i tuoi eventi`} />
       <div className="w-full flex flex-col lg:mt-14 xl:mt-5 xl:max-w-[95%] xl:mx-auto 2xl:mx-16 gap-5">
         {userRole === 'admin' && (
           <div className="flex justify-end">
