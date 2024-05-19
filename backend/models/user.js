@@ -27,6 +27,7 @@ const UserSchema = new mongoose.Schema({
     default: "admin",
     required: true,
   },
+  token: String,
 })
 
 const User = mongoose.model("user", UserSchema)
