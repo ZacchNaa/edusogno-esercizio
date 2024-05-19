@@ -9,12 +9,19 @@ import axios from "axios";
 import ApiConstants from "../configurations/apiConstants";
 import { EventData } from "../types";
 import BaseLoader from "../components/BaseLoader";
+import { useQuery } from "@tanstack/react-query";
+import client from "../configurations/ApiClients";
 
 function Dashboard() {
   const navigate = useNavigate();
   const { userData, setMessage } = useAuth();
 
-  const [events, setEvents] = useState<EventData[] | []>([]);
+const { data: events, isLoading, isError, error} = useQuery({
+  queryKey: ["events"],
+  queryFn: client.getEvents
+})
+
+  const [_, setEvents] = useState<EventData[] | []>([]);
   const [loading, setLoading] = useState(false);
 
   const handleAddEvent = () => {
@@ -36,27 +43,10 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    let isCancelled: boolean = false;
-
-    (async function () {
-      if (!isCancelled) {
-        try {
-          setLoading(true);
-          const response = await axios.get(ApiConstants.GET_ALL_EVENTS_URL);
-          const userEvents: EventData[] = response.data?.details;
-          setEvents(userEvents);
-        } catch (error) {
-          setMessage({text: "We could not get the events, please try again", type:"error"})
-        } finally {
-          setLoading(false);
-        }
-      }
-    })();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, []);
+    if(isError) {
+      setMessage({text: error.message, type:"error"})
+    }
+  }, [error?.message, isError]);
 
   return (
     <Layout>
@@ -70,9 +60,9 @@ function Dashboard() {
           </div>
         )}
         <div className="w-full flex flex-col items-center justify-center">
-          {!loading ? (
+          {!isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:gap-5 2xl:gap-16">
-              {events.map((event: EventData) => (
+              {events?.map((event: EventData) => (
                 <BaseCard
                   key={event._id}
                   event={event}

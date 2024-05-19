@@ -18,8 +18,7 @@ const BaseCard: React.FC<BaseCardProps> = ({ event, userRole, handleDelete }) =>
       <p className="text-muted text-xl font-400">{formatDateTime(event.event_date)}</p>
       <BaseButton label="JOIN" />
       {userRole === "admin" && (
-        <>
-          <div className="flex justify-start pt-3 align-middle gap-3">
+        <div className="flex justify-start pt-3 align-middle gap-3">
             <Link
               to={`/events/${event._id}/view`}
               state={event}
@@ -41,7 +40,6 @@ const BaseCard: React.FC<BaseCardProps> = ({ event, userRole, handleDelete }) =>
               Delete
             </button>
           </div>
-        </>
       )}
       {userRole !== "admin" && (
         <Link
