@@ -1,11 +1,12 @@
 import axios from "axios";
 import ApiConstants from "./apiConstants";
 import { EventData } from "../types";
+import newAxios from "./axiosInstance";
 
 class RequestClients {
 async getEvents(): Promise<EventData[]> {
     try {
-       return ( await axios.get(ApiConstants.GET_ALL_EVENTS_URL)).data.details;
+       return ( await newAxios({url: ApiConstants.GET_ALL_EVENTS_URL})).data.details;
     } catch (error) {
         throw new Error("Error: Could not get events");
     }

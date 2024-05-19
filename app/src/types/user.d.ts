@@ -4,4 +4,5 @@ export interface UserData {
     email:      string;
     role:       string;
     _id:        string;
+    token:      string;
 }
