@@ -1,52 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
 import Heading from "../components/Heading";
 import BaseCard from "../components/BaseCard";
 import BaseButton from "../components/BaseButton";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
-import ApiConstants from "../configurations/apiConstants";
 import { EventData } from "../types";
 import BaseLoader from "../components/BaseLoader";
-import { useQuery } from "@tanstack/react-query";
 import client from "../configurations/ApiClients";
+import useDataFetcher from "../hooks/useDataFetcher";
+import useDataMutate from "../hooks/useDataMutate";
 
 function Dashboard() {
   const navigate = useNavigate();
   const { userData, setMessage } = useAuth();
 
-const { data: events, isLoading, isError, error} = useQuery({
-  queryKey: ["events"],
-  queryFn: client.getEvents
-})
-
-  const [_, setEvents] = useState<EventData[] | []>([]);
-  const [loading, setLoading] = useState(false);
+  const {
+    data: events,
+    isLoading,
+    isError,
+    error,
+  } = useDataFetcher(["events"], client.getEvents);
+  const { mutate: removeEvent } = useDataMutate<EventData>(
+    ["events"],
+    client.deleteEvent
+  );
 
   const handleAddEvent = () => {
     navigate("/events/add");
   };
 
   const handleDelete = async (id: string) => {
-    try {
-      await axios.delete(`${ApiConstants.DELETE_EVENT_URL}${id}`);
-      setLoading(true);
-      const response = await axios.get(ApiConstants.GET_ALL_EVENTS_URL);
-      const userEvents: EventData[] = response.data?.details;
-      setEvents(userEvents);
-    } catch (error) {
-      setMessage({text: "We could not delete the event, please try again", type:"error"})
-    } finally {
-      setLoading(false);
-    }
+    removeEvent(id);
   };
 
   useEffect(() => {
-    if(isError) {
-      setMessage({text: error.message, type:"error"})
+    if (isError) {
+      setMessage({ text: error.message, type: "error" });
     }
-  }, [error?.message, isError]);
+  }, [error?.message, isError, setMessage]);
 
   return (
     <Layout>

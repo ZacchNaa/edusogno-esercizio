@@ -11,9 +11,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import eventSchema from "../utils/enventValidationSchemas";
 import BaseButton from "../components/BaseButton";
 import { EventData } from "../types";
-import axios from "axios";
-import ApiConstants from "../configurations/apiConstants";
 import { useAuth } from "../context/AuthContext";
+import client from "../configurations/ApiClients";
+import useDataMutate from "../hooks/useDataMutate";
+import ApiConstants from "../configurations/apiConstants";
 
 interface FormData {
   attendees?: string[];
@@ -28,6 +29,8 @@ const EventForm: React.FC = () => {
   const { id } = useParams();
   const isEditing = !!id;
   const { setMessage } = useAuth();
+  const { mutateAsync: addEvent } = useDataMutate<EventData>(["events"], client.createEvent);
+  const { mutateAsync: editEvent } = useDataMutate<EventData>(["events"], client.updateEvent);
 
   const {
     control,
@@ -44,9 +47,10 @@ const EventForm: React.FC = () => {
       const updatedEvent = {
         ...data,
         event_date: data.event_date.toISOString(),
+        _id: currentEvent._id || id
       };
       try {
-        await axios.patch(`${ApiConstants.UPDATE_EVENT_URL}${id}`, updatedEvent)
+        await editEvent(updatedEvent)
         navigate("/");
       } catch (error) {
         setMessage({text: "We could not update the event, please try again", type:"error"})
@@ -56,7 +60,7 @@ const EventForm: React.FC = () => {
         ...data,
         event_date: data.event_date.toISOString(), 
       };
-      await axios.post(ApiConstants.CREATE_EVENT_URL, newEvent)
+      await addEvent(newEvent)
       navigate("/");
     }
   };

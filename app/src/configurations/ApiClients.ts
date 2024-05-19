@@ -1,4 +1,3 @@
-import axios from "axios";
 import ApiConstants from "./apiConstants";
 import { EventData } from "../types";
 import newAxios from "./axiosInstance";
@@ -14,7 +13,7 @@ async getEvents(): Promise<EventData[]> {
 
     async getEventById(id: string) {
         try {
-            const response = await axios.get(`${ApiConstants.GET_EVENT_ID_URL}${id}`);
+            const response = await newAxios({url: `${ApiConstants.GET_EVENT_ID_URL}${id}`});
             return response.data;
         } catch (error) {
             return error
@@ -23,16 +22,16 @@ async getEvents(): Promise<EventData[]> {
 
     async createEvent(data: any) {
         try {
-            const response = await axios.post(ApiConstants.CREATE_EVENT_URL, data);
+            const response = await newAxios({url: ApiConstants.CREATE_EVENT_URL, method: "POST", data});
             return response.data;
         } catch (error) {
             return error
         }
     }
 
-    async updateEvent(id: string, data: any) {
+    async updateEvent({_id, ...data}: any) {
         try {
-            const response = await axios.patch(`${ApiConstants.UPDATE_EVENT_URL}${id}`, data);
+            const response = await newAxios({ url: `${ApiConstants.UPDATE_EVENT_URL}${_id}`, method: "PATCH", data});
             return response.data;
         } catch (error) {
             return error
@@ -41,7 +40,7 @@ async getEvents(): Promise<EventData[]> {
 
     async deleteEvent(id: string) {
         try {
-            const response = await axios.delete(`${ApiConstants.DELETE_EVENT_URL}${id}`);
+            const response = await newAxios({url: `${ApiConstants.DELETE_EVENT_URL}${id}`, method: "DELETE"});
             return response.data;
         } catch (error) {
             return error
