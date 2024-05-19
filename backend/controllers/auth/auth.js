@@ -1,13 +1,14 @@
 const bcrypt = require("bcryptjs")
 const User = require("../../models/user")
-const { hashData } = require("../../utils/hashData")
+const { hashData, verifyHashedData } = require("../../utils/hashData")
+const { createToken } = require("../../utils/createToken")
 
 exports.register = async (req, res, next) => {
     try {
         const { first_name: firstName, last_name: lastName, email: _email, role: _role, password } = req.body
 
         // validate fields
-        if (!firstName || !lastName || !_email || !_role || !password) {
+        if (!firstName || !lastName || !_email || !password) {
             return res.status(400).json({ message: "All fields are required" })
         }
 
@@ -56,31 +57,43 @@ exports.register = async (req, res, next) => {
 }
 
 exports.login = async (req, res, next) => {
-    const { email, password } = req.body
-    if (!email || !password) {
-        return res.status(400).json({
-            message: "email or Password not present",
-        })
-    }
 
     try {
-        const user = await User.findOne({ email })
-        if (!user) {
-            res.status(401).json({
-                message: "User not found",
-                error: "User not found",
-            })
-        } else {
-            const { first_name, last_name, email, role, _id } = user
-            bcrypt.compare(password, user.password).then(function (result) {
-                result
-                    ? res.status(200).json({
-                        message: "Login successful",
-                        details: { first_name, last_name, email, role, _id },
-                    })
-                    : res.status(400).json({ message: "Login not successful" })
+        const { email: UserEmail, password } = req.body
+
+        if (!UserEmail || !password) {
+            return res.status(400).json({
+                message: "email or Password not present",
             })
         }
+
+        // check if user exists
+        const user = await User.findOne({ email: UserEmail })
+
+
+        if (!user) {
+            return res.status(401).json({
+                message: "User not found",
+            })
+        }
+
+        const matchedPassword = await verifyHashedData(password, user.password)
+
+        if (!matchedPassword) {
+            return res.status(401).json({
+                message: "Password does not match",
+            })
+        }
+
+        const { first_name, last_name, email, role, _id } = user
+
+        const tokenData = { first_name, last_name, email, role, _id }
+        const _token = createToken(tokenData)
+
+        return res.status(200).json({
+            message: "Login successful",
+            details: { first_name, last_name, email, role, _id, token: _token },
+        })
     } catch (error) {
         res.status(400).json({
             message: "An error occurred",

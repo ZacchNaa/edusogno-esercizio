@@ -1,0 +1,12 @@
+const jwt = require("jsonwebtoken")
+
+const { TOKEN_KEY, TOKEN_EXPIRY} = process.env
+
+exports.createToken = (user, tokenKey = TOKEN_KEY, expiresIn = TOKEN_EXPIRY) => {
+    try {
+        const token = jwt.sign({ user }, tokenKey, { expiresIn })
+        return token
+    } catch (error) {
+        throw error
+    }
+}
