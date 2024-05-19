@@ -6,7 +6,7 @@ exports.verifyToken = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const _token = authHeader && authHeader.split(' ')[1];
 
-    const token = req.headers["x-access-token"] || req.query.token || req.body.token || _token
+    const token = req.headers["x-access-token"] || req.headers["authorization"] || req.query.token || req.body.token || _token
 
     if (!token) return res.status(403).send({
         message: "No token provided",
